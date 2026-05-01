@@ -24,3 +24,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "SwordCatChallenge"
 include(":app")
+include(":data:breeds")
+include(":data:favourites")
+include(":data:core")
+include(":domain:breeds")
+include(":domain:favourites")
+include(":core:ui")
+include(":feature:breeds")
+include(":feature:favourites")
