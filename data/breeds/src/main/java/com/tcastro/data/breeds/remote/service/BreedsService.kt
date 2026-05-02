@@ -19,7 +19,7 @@ interface BreedsService {
     ): BreedDto
 
     @GET("breeds/search")
-    fun searchBreeds(
+    suspend fun searchBreeds(
         @Query("q") query: String
     ): List<BreedDto>
 }

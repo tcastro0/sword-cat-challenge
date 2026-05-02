@@ -60,7 +60,45 @@ class BreedsRepositoryIntegrationTest {
             assert(breeds.first().id == "abys")
             awaitComplete()
         }
-
     }
+
+
+    @Test
+    fun `getBreedById returns correct breed`() = runTest {
+        mockWebServer.enqueue(
+            MockResponse.Builder()
+                .code(200)
+                .body(readJson("breed_by_id_response.json"))
+                .build()
+        )
+
+        repo.getBreedById("aege").test {
+            val breed = awaitItem()
+            assert(breed!=null)
+            assert(breed?.id == "aege")
+            awaitComplete()
+        }
+    }
+
+
+
+    @Test
+    fun `breed search returns collection`() = runTest {
+        mockWebServer.enqueue(
+            MockResponse.Builder()
+                .code(200)
+                .body(readJson("breeds_search_response.json"))
+                .build()
+        )
+
+        repo.searchBreeds("air").test {
+            val breeds = awaitItem()
+            assert(breeds.isNotEmpty())
+            assert(breeds.first().name.contains("air"))
+            awaitComplete()
+        }
+    }
+
+
 
 }
