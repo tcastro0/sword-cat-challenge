@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -10,6 +12,9 @@ android {
             minorApiLevel = 1
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.tcastro.swordcatchallenge"
@@ -19,6 +24,21 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "CAT_API_URL",
+            "\"https://api.thecatapi.com/v1/\""
+        )
+
+        val apiKey = gradleLocalProperties(rootDir, providers)
+            .getProperty("CAT_KEY") ?: ""
+        buildConfigField(
+            "String",
+            "CAT_KEY",
+            "\"$apiKey\""
+        )
+
     }
 
     buildTypes {
@@ -44,6 +64,9 @@ dependencies {
     implementation(libs.bundles.android)
     implementation(platform(libs.androidx.compose.bom))
 
+    implementation(platform(libs.koin.bom))
+    implementation(libs.bundles.koin.android)
+
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.uitesting)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -51,6 +74,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(project(":core:ui"))
+    implementation(project(":data:core"))
     implementation(project(":data:breeds"))
     implementation(project(":data:favourites"))
     implementation(project(":domain:breeds"))
