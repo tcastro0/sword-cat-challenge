@@ -10,6 +10,8 @@ fun fakeBreed(
     temperament: String = "Active, Energetic",
     description: String = "$id description",
     imageUrl: String? = "https://example.com/cat.jpg",
+    imageId: String? = "https://example.com/cat.jpg",
+    lifeSpan: String = "1-4"
 ) = Breed(
     id = id,
     name = name,
@@ -17,4 +19,6 @@ fun fakeBreed(
     temperament = temperament,
     description = description,
     imageUrl = imageUrl,
+    imageId = imageId,
+    lifeSpan = lifeSpan
 )

@@ -41,4 +41,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
 
     implementation(project(":domain:breeds"))
+
+    implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.compose)
 }
