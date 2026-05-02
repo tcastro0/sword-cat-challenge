@@ -7,6 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 
 fun dataCoreModule(baseUrl: String, apiKey: String) = module {
@@ -43,7 +44,7 @@ fun dataCoreModule(baseUrl: String, apiKey: String) = module {
         Retrofit.Builder()
             .baseUrl(get<String>(named("baseUrl")))
             .client(get())
-            .addConverterFactory(get())
+            .addConverterFactory(MoshiConverterFactory.create(get()))
             .build()
     }
 
