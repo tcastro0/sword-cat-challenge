@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 
 class GetBreedDetailUseCase(private val repository: BreedsRepository) {
-    operator fun invoke(breedId: String): Flow<Breed?> =
+    suspend operator fun invoke(breedId: String): Flow<Breed?> =
         repository.getBreedById(breedId)
 }

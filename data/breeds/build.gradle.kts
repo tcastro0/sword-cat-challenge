@@ -3,20 +3,34 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+android {
+    namespace = "com.tcastro.swordcatchallenge.data.breeds"
+    compileSdk = 36
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 }
-
+kotlin {
+    jvmToolchain(21)
+}
 
 dependencies {
     ksp(libs.moshi.kotlin.codegen)
 
     api(project(":data:core"))
     implementation(project(":domain:breeds"))
+
+    testImplementation(libs.bundles.integration.testing)
+
+}
+
+tasks.whenTaskAdded {
+    if (name.contains("AndroidTest")) enabled = false
 }
