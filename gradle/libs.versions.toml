@@ -12,7 +12,7 @@ jetbrainsKotlinJvm = "2.3.21"
 appcompat = "1.7.1"
 material = "1.13.0"
 coroutines = "1.10.2"
-ksp = "2.3.21-1.0.32"
+ksp = "2.3.6"
 koin-bom = "4.2.1"
 room = "2.8.4"
 retrofit = "3.0.0"
@@ -100,7 +100,7 @@ uitesting = [
     "androidx-espresso-core",
 ]
 koin-android = [
-    "koin-bom",
+    "koin-core",
     "koin-coroutines",
     "koin-android",
     "koin-androidx-compose",
@@ -123,5 +123,6 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
