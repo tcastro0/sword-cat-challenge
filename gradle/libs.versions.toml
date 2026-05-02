@@ -10,7 +10,6 @@ kotlin = "2.3.21"
 composeBom = "2026.04.01"
 jetbrainsKotlinJvm = "2.3.21"
 appcompat = "1.7.1"
-material = "1.13.0"
 coroutines = "1.10.2"
 ksp = "2.3.6"
 koin-bom = "4.2.1"
@@ -20,7 +19,7 @@ okhttp = "5.3.2"
 moshi = "1.15.2"
 turbine = "1.2.1"
 mockk = "1.14.9"
-multidex = "2.0.1"
+material3 = "1.4.0"
 
 [libraries]
 
@@ -43,7 +42,6 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -77,8 +75,6 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 
-# MISC
-#androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 
 [bundles]
 android = [
@@ -93,7 +89,6 @@ compose = [
    "androidx-compose-ui-tooling-preview",
    "androidx-compose-ui-test-junit4",
    "androidx-compose-material3",
-   "material"
 ]
 testing = [
     "junit",
