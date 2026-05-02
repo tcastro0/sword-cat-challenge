@@ -19,12 +19,11 @@ android {
 
 
 dependencies {
-
-
-    implementation(libs.bundles.network)
+    api(libs.bundles.network)
     ksp(libs.moshi.kotlin.codegen)
 
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.android)
+    api(platform(libs.koin.bom))
+    api(libs.koin.android)
+    api(libs.kotlinx.coroutines.android)
 }
 
