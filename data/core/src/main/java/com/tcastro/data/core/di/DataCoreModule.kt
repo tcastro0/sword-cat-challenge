@@ -1,9 +1,12 @@
 package com.tcastro.data.core.di
 
+import androidx.room.Room
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.tcastro.data.core.database.SwordCatsDatabase
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -47,5 +50,18 @@ fun dataCoreModule(baseUrl: String, apiKey: String) = module {
             .addConverterFactory(MoshiConverterFactory.create(get()))
             .build()
     }
+
+    //Database provider
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            SwordCatsDatabase::class.java,
+            "sword_cats_database"
+        ).build()
+    }
+
+    // DAOs provider
+    single { get<SwordCatsDatabase>().breedDao() }
+    single { get<SwordCatsDatabase>().remoteKeyDao() }
 
 }

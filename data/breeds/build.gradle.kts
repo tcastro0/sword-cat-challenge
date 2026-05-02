@@ -23,9 +23,12 @@ kotlin {
 
 dependencies {
     ksp(libs.moshi.kotlin.codegen)
-
     api(project(":data:core"))
     implementation(project(":domain:breeds"))
+
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.paging.common)
 
     testImplementation(libs.bundles.integration.testing)
 

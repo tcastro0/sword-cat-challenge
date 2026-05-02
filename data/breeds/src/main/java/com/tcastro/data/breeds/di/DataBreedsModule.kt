@@ -13,6 +13,11 @@ fun dataBreedsModule() = module {
     }
 
     single<BreedsRepository> {
-        BreedsRepositoryImpl(service = get())
+        BreedsRepositoryImpl(
+            service = get(),
+            database = get(),
+            breedDao = get(),
+            remoteKeyDao = get()
+        )
     }
 }

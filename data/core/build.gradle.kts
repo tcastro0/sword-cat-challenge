@@ -26,6 +26,9 @@ dependencies {
     api(platform(libs.koin.bom))
     api(libs.koin.android)
     api(libs.kotlinx.coroutines.android)
+
+    implementation(libs.bundles.room)
+    ksp(libs.androidx.room.compiler)
 }
 
 

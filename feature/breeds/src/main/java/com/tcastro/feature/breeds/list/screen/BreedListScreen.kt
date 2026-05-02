@@ -3,12 +3,13 @@ package com.tcastro.feature.breeds.list.screen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,9 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.tcastro.feature.breeds.list.model.BreedUIModel
-import com.tcastro.feature.breeds.list.state.BreedListState
 import com.tcastro.feature.breeds.list.viewmodel.BreedListViewModel
+import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +39,7 @@ fun BreedListScreen(
     viewModel: BreedListViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val breedsState = viewModel.breeds.collectAsLazyPagingItems()
 
     Scaffold(
         modifier = modifier,
@@ -43,21 +50,12 @@ fun BreedListScreen(
             Box(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                when (val immutableState = uiState) {
-                    is BreedListState.Loading -> {
-                        CircularProgressIndicator()
+                when (breedsState.loadState.refresh) {
+                    is LoadState.Loading ->  CircularProgressIndicator()
+                    is LoadState.Error -> Text("Failed to load breeds")
+                    else -> {
+                        BreedListScreenContent(breedsState)
                     }
-
-                    is BreedListState.Error -> {
-                        //TODO error state
-                        Text(immutableState.message)
-                    }
-
-                    is BreedListState.Success -> {
-                        //TODO empty state
-                        BreedListScreenContent(immutableState.breeds)
-                    }
-
                 }
             }
         }
@@ -65,7 +63,8 @@ fun BreedListScreen(
 }
 
 @Composable
-fun BreedListScreenContent(breeds: List<BreedUIModel>) {
+fun BreedListScreenContent(breeds: LazyPagingItems<BreedUIModel>) {
+
     LazyVerticalGrid(
         columns = GridCells.Adaptive(100.dp),
         contentPadding = PaddingValues(16.dp),
@@ -73,19 +72,26 @@ fun BreedListScreenContent(breeds: List<BreedUIModel>) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
-            items = breeds,
-            key = { it.id }
-        ) { breed ->
-
-            Card(
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-            ) {
-                Text(breed.name)
-
+            count = breeds.itemCount,
+            key = breeds.itemKey { it.id }
+        ) { index ->
+            val breed = breeds[index]
+            breed?.let { breed->
+                Card(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .height(100.dp)
+                ) {
+                    Text(breed.name)
+                }
             }
+        }
 
+        if (breeds.loadState.append is LoadState.Loading) {
+            item(span = { GridItemSpan(4) }) {
+                Spacer(Modifier.height(50.dp))
+                CircularProgressIndicator()
+            }
         }
     }
 
@@ -94,6 +100,7 @@ fun BreedListScreenContent(breeds: List<BreedUIModel>) {
 @Preview(showBackground = true)
 @Composable
 fun BreedListScreenContentPreview() {
+
     val breeds: List<BreedUIModel> = listOf(
         BreedUIModel(
             "aege",
@@ -121,5 +128,9 @@ fun BreedListScreenContentPreview() {
             isFavorite = true
         )
     )
-    BreedListScreenContent(breeds)
+    val pagingItems = flowOf(
+        PagingData.from(breeds)
+    ).collectAsLazyPagingItems()
+
+    BreedListScreenContent(pagingItems)
 }

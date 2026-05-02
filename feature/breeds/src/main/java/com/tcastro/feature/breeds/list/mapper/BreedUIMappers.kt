@@ -4,14 +4,11 @@ import com.tcastro.domain.breeds.model.Breed
 import com.tcastro.feature.breeds.list.model.BreedUIModel
 
 
-fun List<Breed>.toUIModel(): List<BreedUIModel>{
-    return this.map {
-        BreedUIModel(
-            id = it.id,
-            name = it.name,
-            imageUrl = it.imageUrl,
+fun Breed.toUIModel(): BreedUIModel{
+    return BreedUIModel(
+            id = this.id,
+            name = this.name,
+            imageUrl = this.imageUrl,
             isFavorite = false
         )
-    }
-
 }
