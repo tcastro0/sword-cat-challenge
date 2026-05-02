@@ -1,6 +1,7 @@
 package com.tcastro.swordcatchallenge
 
 import android.app.Application
+import com.tcastro.data.breeds.di.dataBreedsModule
 import com.tcastro.data.core.di.dataCoreModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,7 +20,8 @@ class SwordCatApplication : Application() {
                 dataCoreModule(
                     baseUrl = BuildConfig.CAT_API_URL,
                     apiKey = BuildConfig.CAT_KEY
-                )
+                ),
+                dataBreedsModule()
             )
         }
     }
