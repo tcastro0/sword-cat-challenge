@@ -21,6 +21,7 @@ turbine = "1.2.1"
 mockk = "1.14.9"
 material3 = "1.4.0"
 pagingVersion = "3.4.2"
+coil = "3.4.0"
 
 [libraries]
 
@@ -81,6 +82,13 @@ moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", ver
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "pagingVersion" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingVersion" }
 
+# Images
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+
+
+
+
 
 [bundles]
 android = [
@@ -131,6 +139,10 @@ room = [
     "androidx-room-runtime",
     "androidx-room-ktx",
     "androidx-room-paging",
+]
+coil = [
+    "coil-compose",
+    "coil-network",
 ]
 
 [plugins]

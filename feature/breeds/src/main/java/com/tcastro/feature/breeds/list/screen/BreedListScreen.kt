@@ -1,10 +1,8 @@
 package com.tcastro.feature.breeds.list.screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,17 +12,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -36,6 +25,13 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.tcastro.core.ui.components.GenericEmptyComponent
+import com.tcastro.core.ui.components.GenericErrorComponent
+import com.tcastro.core.ui.components.GenericLoadingComponent
+import com.tcastro.core.ui.components.SearchFieldComponent
+import com.tcastro.core.ui.theme.Dimen
+import com.tcastro.core.ui.theme.SwordCatChallengeTheme
+import com.tcastro.feature.breeds.list.component.BreedListItemComponent
 import com.tcastro.feature.breeds.list.model.BreedUIModel
 import com.tcastro.feature.breeds.list.state.BreedListState
 import com.tcastro.feature.breeds.list.state.SearchState
@@ -52,57 +48,47 @@ fun BreedListScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val breedsState = viewModel.breeds.collectAsLazyPagingItems()
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(title = { Text("Cats") })
-        },
-        content = { paddingValues ->
-            BreedListScreenContent(
-                paddingValues,
-                uiState,
-                breedsState,
-                viewModel::onSearchQueryChanged,
-                viewModel::onBreedClick
-            )
-
-        }
+    BreedListScreenContent(
+        modifier,
+        uiState,
+        breedsState,
+        viewModel::onSearchQueryChanged,
+        viewModel::onBreedClick
     )
+
 }
 
 @Composable
 fun BreedListScreenContent(
-    paddingValues: PaddingValues,
+    modifier: Modifier,
     uiState: BreedListState,
     breedsState: LazyPagingItems<BreedUIModel>,
     onSearchQueryChanged: (String) -> Unit,
     onBreedClick: (BreedUIModel) -> Unit
 ) {
-
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(paddingValues)
     ) {
-        OutlinedTextField(
-            value = uiState.searchQuery,
-            onValueChange = onSearchQueryChanged,
-            placeholder = { Text("Search ...") },
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+        SearchFieldComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            singleLine = true,
-            shape = RoundedCornerShape(24.dp)
+            query = uiState.searchQuery,
+            onQueryChange = onSearchQueryChanged,
+            placeholderText = "Search ..."
         )
-
 
         if (uiState.searchQuery.isEmpty()) {
             when (breedsState.loadState.refresh) {
-                is LoadState.Loading -> CircularProgressIndicator()
-                is LoadState.Error -> Text("Failed to load breeds")
+                is LoadState.Loading -> GenericLoadingComponent()
+                is LoadState.Error -> GenericErrorComponent(subTitle = "Failed to load breeds")
                 else -> {
-                    BreedListComponent(breedsState, onBreedClick)
+                    if(breedsState.itemCount>0){
+                        BreedListComponent(breedsState, onBreedClick)
+                    }else{
+                        GenericEmptyComponent()
+                    }
                 }
             }
         } else {
@@ -111,12 +97,9 @@ fun BreedListScreenContent(
                 onBreedClick = onBreedClick
             )
         }
-
-
     }
 
 }
-
 
 
 @Composable
@@ -124,12 +107,11 @@ fun BreedListComponent(
     breeds: LazyPagingItems<BreedUIModel>,
     onBreedClick: (BreedUIModel) -> Unit
 ) {
-
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(100.dp),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        columns = GridCells.Adaptive(Dimen.Images.xLarge),
+        contentPadding = PaddingValues(Dimen.Spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(Dimen.Spacing.default),
+        horizontalArrangement = Arrangement.spacedBy(Dimen.Spacing.default)
     ) {
         items(
             count = breeds.itemCount,
@@ -137,20 +119,22 @@ fun BreedListComponent(
         ) { index ->
             val breed = breeds[index]
             breed?.let { breed ->
-                Card(
+
+                BreedListItemComponent(
                     modifier = Modifier
-                        .width(100.dp)
-                        .height(100.dp)
-                        .clickable { onBreedClick(breed) }
-                ) {
-                    Text(breed.name)
-                }
+                        .width(Dimen.Images.xLarge)
+                        .height(Dimen.Images.xxLarge),
+                    id = breed.id,
+                    name = breed.name,
+                    lifespan = breed.lifespan,
+                    imageUrl = breed.imageUrl,
+                    onClick = { onBreedClick(breed) },
+                )
             }
         }
 
         if (breeds.loadState.append is LoadState.Loading) {
             item(span = { GridItemSpan(4) }) {
-                Spacer(Modifier.height(50.dp))
                 CircularProgressIndicator()
             }
         }
@@ -164,36 +148,38 @@ fun SearchResultsGridComponent(
 ) {
     when (val state = searchState.searchState) {
         is SearchState.Idle -> {}
-        is SearchState.Loading -> CircularProgressIndicator()
-        is SearchState.Error -> Text(state.message)
+        is SearchState.Loading -> GenericLoadingComponent()
+        is SearchState.Error -> GenericErrorComponent(subTitle = state.message)
         is SearchState.Success -> {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(100.dp),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(
-                    items = state.breeds,
-                    key = { it.id }
-                ) { breed ->
-                    Card(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp)
-                            .clickable { onBreedClick(breed) }
-                    ) {
-                        Text(breed.name)
+            if (state.breeds.isEmpty()){
+                GenericEmptyComponent()
+            }else {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(Dimen.Images.xLarge),
+                    contentPadding = PaddingValues(Dimen.Spacing.medium),
+                    verticalArrangement = Arrangement.spacedBy(Dimen.Spacing.default),
+                    horizontalArrangement = Arrangement.spacedBy(Dimen.Spacing.default)
+                ) {
+                    items(
+                        items = state.breeds,
+                        key = { it.id }
+                    ) { breed ->
+                        BreedListItemComponent(
+                            modifier = Modifier
+                                .width(Dimen.Images.xLarge)
+                                .height(Dimen.Images.xxLarge),
+                            id = breed.id,
+                            name = breed.name,
+                            lifespan = breed.lifespan,
+                            imageUrl = breed.imageUrl,
+                            onClick = { onBreedClick(breed) },
+                        )
                     }
-
                 }
             }
         }
-        }
-
-
+    }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -229,5 +215,28 @@ fun BreedListScreenContentPreview() {
         PagingData.from(breeds)
     ).collectAsLazyPagingItems()
 
-    BreedListComponent(pagingItems,{})
+    SwordCatChallengeTheme {
+        BreedListComponent(pagingItems) {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BreedListScreenContentErrorStatePreview() {
+    val pagingItems = flowOf(
+        PagingData.from(emptyList<BreedUIModel>())
+    ).collectAsLazyPagingItems()
+
+    SwordCatChallengeTheme {
+        BreedListScreenContent(
+            modifier = Modifier,
+            uiState = BreedListState().copy(
+                searchQuery = "test",
+                searchState = SearchState.Error("Timeout")
+            ),
+            breedsState = pagingItems,
+            onSearchQueryChanged = {},
+            onBreedClick = { }
+        )
+    }
 }
