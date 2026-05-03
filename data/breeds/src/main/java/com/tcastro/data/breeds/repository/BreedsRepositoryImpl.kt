@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.tcastro.data.breeds.mapper.toDomain
+import com.tcastro.data.breeds.mapper.toEntity
 import com.tcastro.data.breeds.mediator.BreedsMediator
 import com.tcastro.data.breeds.remote.service.BreedsService
 import com.tcastro.data.core.database.SwordCatsDatabase
@@ -45,8 +46,17 @@ class BreedsRepositoryImpl(
     }
 
     override fun searchBreeds(query: String): Flow<List<Breed>> = flow {
-        val breeds = service.searchBreeds(query).map { it.toDomain() }
-        emit(breeds)
+        try {
+            val remoteResults = service.searchBreeds(query)
+            val entities = remoteResults.map { it.toEntity() }
+            breedDao.insertAll(entities)
+
+            emit(remoteResults.map { it.toDomain() })
+        } catch (e: Exception) {
+            breedDao.searchBreeds(query)
+                .map { entities -> entities.map { it.toDomain() } }
+                .collect { emit(it) }
+        }
     }
 
     override suspend fun getBreedById(id: String): Flow<Breed?> = flow {

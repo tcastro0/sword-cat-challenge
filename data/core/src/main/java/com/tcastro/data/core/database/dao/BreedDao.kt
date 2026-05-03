@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.tcastro.data.core.database.entity.BreedEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BreedDao {
@@ -25,4 +26,7 @@ interface BreedDao {
 
     @Query("SELECT COUNT(*) FROM breeds")
     suspend fun getCount():Int
+
+    @Query("SELECT * FROM breeds WHERE name LIKE '%' || :query || '%'")
+    fun searchBreeds(query: String): Flow<List<BreedEntity>>
 }

@@ -12,3 +12,13 @@ fun Breed.toUIModel(): BreedUIModel{
             isFavorite = false
         )
 }
+fun List<Breed>.toUIModel(): List<BreedUIModel>{
+    return this.map {
+        BreedUIModel(
+            id = it.id,
+            name = it.name,
+            imageUrl = it.imageUrl,
+            isFavorite = false
+        )
+    }
+}

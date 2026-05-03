@@ -1,18 +1,27 @@
 package com.tcastro.feature.breeds.list.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -28,6 +37,8 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.tcastro.feature.breeds.list.model.BreedUIModel
+import com.tcastro.feature.breeds.list.state.BreedListState
+import com.tcastro.feature.breeds.list.state.SearchState
 import com.tcastro.feature.breeds.list.viewmodel.BreedListViewModel
 import kotlinx.coroutines.flow.flowOf
 import org.koin.androidx.compose.koinViewModel
@@ -47,23 +58,72 @@ fun BreedListScreen(
             TopAppBar(title = { Text("Cats") })
         },
         content = { paddingValues ->
-            Box(
-                modifier = Modifier.padding(paddingValues)
-            ) {
-                when (breedsState.loadState.refresh) {
-                    is LoadState.Loading ->  CircularProgressIndicator()
-                    is LoadState.Error -> Text("Failed to load breeds")
-                    else -> {
-                        BreedListScreenContent(breedsState)
-                    }
-                }
-            }
+            BreedListScreenContent(
+                paddingValues,
+                uiState,
+                breedsState,
+                viewModel::onSearchQueryChanged,
+                viewModel::onBreedClick
+            )
+
         }
     )
 }
 
 @Composable
-fun BreedListScreenContent(breeds: LazyPagingItems<BreedUIModel>) {
+fun BreedListScreenContent(
+    paddingValues: PaddingValues,
+    uiState: BreedListState,
+    breedsState: LazyPagingItems<BreedUIModel>,
+    onSearchQueryChanged: (String) -> Unit,
+    onBreedClick: (BreedUIModel) -> Unit
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
+        OutlinedTextField(
+            value = uiState.searchQuery,
+            onValueChange = onSearchQueryChanged,
+            placeholder = { Text("Search ...") },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            singleLine = true,
+            shape = RoundedCornerShape(24.dp)
+        )
+
+
+        if (uiState.searchQuery.isEmpty()) {
+            when (breedsState.loadState.refresh) {
+                is LoadState.Loading -> CircularProgressIndicator()
+                is LoadState.Error -> Text("Failed to load breeds")
+                else -> {
+                    BreedListComponent(breedsState, onBreedClick)
+                }
+            }
+        } else {
+            SearchResultsGridComponent(
+                searchState = uiState,
+                onBreedClick = onBreedClick
+            )
+        }
+
+
+    }
+
+}
+
+
+
+@Composable
+fun BreedListComponent(
+    breeds: LazyPagingItems<BreedUIModel>,
+    onBreedClick: (BreedUIModel) -> Unit
+) {
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(100.dp),
@@ -76,11 +136,12 @@ fun BreedListScreenContent(breeds: LazyPagingItems<BreedUIModel>) {
             key = breeds.itemKey { it.id }
         ) { index ->
             val breed = breeds[index]
-            breed?.let { breed->
+            breed?.let { breed ->
                 Card(
                     modifier = Modifier
                         .width(100.dp)
                         .height(100.dp)
+                        .clickable { onBreedClick(breed) }
                 ) {
                     Text(breed.name)
                 }
@@ -94,8 +155,45 @@ fun BreedListScreenContent(breeds: LazyPagingItems<BreedUIModel>) {
             }
         }
     }
+}
+
+@Composable
+fun SearchResultsGridComponent(
+    searchState: BreedListState,
+    onBreedClick: (BreedUIModel) -> Unit,
+) {
+    when (val state = searchState.searchState) {
+        is SearchState.Idle -> {}
+        is SearchState.Loading -> CircularProgressIndicator()
+        is SearchState.Error -> Text(state.message)
+        is SearchState.Success -> {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(100.dp),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(
+                    items = state.breeds,
+                    key = { it.id }
+                ) { breed ->
+                    Card(
+                        modifier = Modifier
+                            .width(100.dp)
+                            .height(100.dp)
+                            .clickable { onBreedClick(breed) }
+                    ) {
+                        Text(breed.name)
+                    }
+
+                }
+            }
+        }
+        }
+
 
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -113,14 +211,13 @@ fun BreedListScreenContentPreview() {
             name = "American Curl",
             imageUrl = "",
             isFavorite = true
-        )        ,
+        ),
         BreedUIModel(
             "asdasd",
             name = "test Curl",
             imageUrl = "",
             isFavorite = true
-        )
-        ,
+        ),
         BreedUIModel(
             "3432werdf",
             name = "asdgh agean",
@@ -132,5 +229,5 @@ fun BreedListScreenContentPreview() {
         PagingData.from(breeds)
     ).collectAsLazyPagingItems()
 
-    BreedListScreenContent(pagingItems)
+    BreedListComponent(pagingItems,{})
 }
