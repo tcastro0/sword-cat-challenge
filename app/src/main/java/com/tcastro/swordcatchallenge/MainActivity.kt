@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.tcastro.core.ui.theme.SwordCatChallengeTheme
+import com.tcastro.feature.breeds.detail.screen.BreedDetailScreen
 import com.tcastro.feature.breeds.list.screen.BreedListScreen
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +22,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             SwordCatChallengeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BreedListScreen( modifier = Modifier.padding(innerPadding))
+                   // BreedListScreen( modifier = Modifier.padding(innerPadding))
+                    BreedDetailScreen( modifier = Modifier.padding(innerPadding)){}
                 }
             }
         }
