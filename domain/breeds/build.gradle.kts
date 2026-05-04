@@ -15,4 +15,5 @@ dependencies {
     testImplementation(libs.bundles.testing)
 
     implementation(libs.androidx.paging.common)
+    testImplementation(libs.androidx.paging.testing)
 }
