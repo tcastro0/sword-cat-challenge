@@ -37,6 +37,8 @@ object Dimen {
         val iconDefault:Dp = 18.dp
         val iconDefaultPlus:Dp = 24.dp
         val iconMedium:Dp = 38.dp
+
+        val iconLarge:Dp = 60.dp
         val xLarge: Dp = 160.dp
         val xxLarge: Dp = 260.dp
     }

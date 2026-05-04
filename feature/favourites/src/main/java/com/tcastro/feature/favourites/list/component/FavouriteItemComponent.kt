@@ -2,22 +2,17 @@ package com.tcastro.feature.favourites.list.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.tcastro.core.ui.components.FavouriteButtonComponent
 import com.tcastro.core.ui.theme.Dimen
+import com.tcastro.core.ui.theme.SwordCatChallengeTheme
 import com.tcastro.feature.favourites.list.model.FavouriteUiModel
-
 
 
 @Composable
@@ -51,40 +48,25 @@ fun FavouriteItemComponent(
         elevation = CardDefaults.cardElevation(defaultElevation = Dimen.Elevation.small)
     ) {
 
-        Column {
-            Box {
-                AsyncImage(
-                    model = favourite.breedImageUrl,
-                    contentDescription = favourite.breedName,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(Dimen.Images.xLarge),
-                    contentScale = ContentScale.Crop
-                )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimen.Spacing.default)
+        ) {
 
-                IconButton(
-                    onClick = onRemove,
-                    modifier = Modifier
-                        .padding(Dimen.Spacing.smallPlus)
-                        .size(Dimen.Images.iconMedium)
-                        .clip(CircleShape)
-                        .align(Alignment.TopEnd)
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Favorite,
-                        contentDescription = "Remove from favourites",
-                        tint = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.size(Dimen.Images.iconDefault)
-                    )
-                }
-            }
+            AsyncImage(
+                model = favourite.breedImageUrl,
+                contentDescription = favourite.breedName,
+                modifier = Modifier
 
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(Dimen.Spacing.small)),
+                contentScale = ContentScale.Crop
+            )
 
             Column(
-                modifier = Modifier.padding(
-                    horizontal = Dimen.Spacing.defaultPlus,
-                    vertical = Dimen.Spacing.default
-                ),
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(Dimen.Spacing.small)
             ) {
                 Text(
@@ -113,7 +95,40 @@ fun FavouriteItemComponent(
                     )
                 }
             }
+
+            FavouriteButtonComponent(
+                isFavourite = true,
+                onClick = onRemove,
+                modifier = Modifier
+                    .padding(Dimen.Spacing.default)
+                    .padding(end = Dimen.Spacing.medium),
+                size = Dimen.Images.iconMedium,
+                iconSize = Dimen.Images.iconDefault,
+                backgroundColor = MaterialTheme.colorScheme.secondaryContainer
+            )
+
         }
 
+    }
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+fun FavouriteItemComponentPreview() {
+    SwordCatChallengeTheme {
+        FavouriteItemComponent(
+            favourite = FavouriteUiModel(
+                breedId = "1",
+                breedName = "aegean",
+                breedImageUrl = null,
+                breedLifeSpan = "1-2",
+                breedOrigin = "adsiuhasf"
+            ),
+            onClick = {},
+            onRemove = {},
+            modifier = Modifier
+        )
     }
 }

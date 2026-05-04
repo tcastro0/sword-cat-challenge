@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import com.tcastro.core.ui.theme.Dimen
 
 
@@ -32,13 +34,15 @@ fun AverageLifespanCardComponent(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(Dimen.Spacing.medium),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
         Row(
-            modifier = Modifier.padding(Dimen.Spacing.medium),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimen.Spacing.medium),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Dimen.Spacing.defaultPlus)
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
             Column {
@@ -48,24 +52,35 @@ fun AverageLifespanCardComponent(
                     color = MaterialTheme.colorScheme.outline
                 )
                 Spacer(modifier = Modifier.height(Dimen.Spacing.small))
-                Text(
-                    text = "${averageLifespan} years",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "$averageLifespan",
+                        style = MaterialTheme.typography.headlineMedium
+                            .copy(fontWeight = FontWeight.Medium),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.width(Dimen.Spacing.defaultPlus))
+                    Text(
+                        text = "years",
+                        style = MaterialTheme.typography.bodyLarge
+                            .copy(fontWeight = FontWeight.Medium),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(Dimen.Spacing.default))
                 Text(
                     text = "across $favouriteCount breeds",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primaryContainer
                 )
             }
 
             Icon(
                 imageVector = Icons.Outlined.Notifications,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(Dimen.Images.iconDefaultPlus)
+                tint = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.size(Dimen.Images.iconLarge)
             )
         }
     }
