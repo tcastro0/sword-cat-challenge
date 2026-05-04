@@ -23,6 +23,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -49,13 +52,23 @@ class BreedListViewModel(
             }
         }.cachedIn(viewModelScope)
 
+    init {
+        viewModelScope.launch(dispatcher) {
+            uiState
+                .map { it.searchQuery }
+                .debounce(300L)
+                .distinctUntilChanged()
+                .filter { it.isNotEmpty() }
+                .collect { query ->
+                    searchBreeds(query)
+                }
+        }
+    }
 
     fun onSearchQueryChanged(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
         if (query.isEmpty()) {
             _uiState.update { it.copy(searchState = SearchState.Idle) }
-        } else {
-            searchBreeds(query)
         }
     }
 
