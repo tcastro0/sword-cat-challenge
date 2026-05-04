@@ -6,5 +6,6 @@ data class BreedUIModel(
     val name: String,
     val imageUrl: String?,
     val lifespan: String?=null,
+    val origin: String?=null,
     val isFavorite: Boolean
 )

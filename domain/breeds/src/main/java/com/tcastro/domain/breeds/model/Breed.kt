@@ -9,4 +9,5 @@ data class Breed(
     val lifeSpan: String,
     val imageUrl: String?,
     val imageId: String?,
+    val isFavourite: Boolean = false
 )

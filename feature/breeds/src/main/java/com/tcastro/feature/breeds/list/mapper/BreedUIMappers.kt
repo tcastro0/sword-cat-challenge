@@ -9,7 +9,7 @@ fun Breed.toUIModel(): BreedUIModel{
             id = this.id,
             name = this.name,
             imageUrl = this.imageUrl,
-            isFavorite = false
+            isFavorite = this.isFavourite
         )
 }
 fun List<Breed>.toUIModel(): List<BreedUIModel>{
@@ -18,7 +18,7 @@ fun List<Breed>.toUIModel(): List<BreedUIModel>{
             id = it.id,
             name = it.name,
             imageUrl = it.imageUrl,
-            isFavorite = false
+            isFavorite = it.isFavourite
         )
     }
 }

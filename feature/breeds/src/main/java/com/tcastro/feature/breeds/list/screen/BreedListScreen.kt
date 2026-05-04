@@ -54,7 +54,8 @@ fun BreedListScreen(
         uiState,
         breedsState,
         viewModel::onSearchQueryChanged,
-        onBreedClick = onItemClick
+        onBreedClick = onItemClick,
+        viewModel::toggleFavourite
     )
 
 }
@@ -65,7 +66,8 @@ fun BreedListScreenContent(
     uiState: BreedListState,
     breedsState: LazyPagingItems<BreedUIModel>,
     onSearchQueryChanged: (String) -> Unit,
-    onBreedClick: (String) -> Unit
+    onBreedClick: (String) -> Unit,
+    onFavouriteClick: (BreedUIModel) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -86,7 +88,10 @@ fun BreedListScreenContent(
                 is LoadState.Error -> GenericErrorComponent(subTitle = "Failed to load breeds")
                 else -> {
                     if(breedsState.itemCount>0){
-                        BreedListComponent(breedsState, onBreedClick)
+                        BreedListComponent(
+                            breedsState,
+                            onBreedClick,
+                            onFavouriteClick)
                     }else{
                         GenericEmptyComponent()
                     }
@@ -95,7 +100,8 @@ fun BreedListScreenContent(
         } else {
             SearchResultsGridComponent(
                 searchState = uiState,
-                onBreedClick = onBreedClick
+                onBreedClick = onBreedClick,
+                onFavouriteClick = onFavouriteClick
             )
         }
     }
@@ -106,7 +112,8 @@ fun BreedListScreenContent(
 @Composable
 fun BreedListComponent(
     breeds: LazyPagingItems<BreedUIModel>,
-    onBreedClick: (String) -> Unit
+    onBreedClick: (String) -> Unit,
+    onFavouriteClick: (BreedUIModel) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(Dimen.Images.xLarge),
@@ -130,6 +137,10 @@ fun BreedListComponent(
                     lifespan = breed.lifespan,
                     imageUrl = breed.imageUrl,
                     onClick = { onBreedClick(breed.id) },
+                    isFavourite = breed.isFavorite,
+                    onFavouriteClick = {
+                        onFavouriteClick(breed)
+                    },
                 )
             }
         }
@@ -146,6 +157,7 @@ fun BreedListComponent(
 fun SearchResultsGridComponent(
     searchState: BreedListState,
     onBreedClick: (String) -> Unit,
+    onFavouriteClick: (BreedUIModel) -> Unit,
 ) {
     when (val state = searchState.searchState) {
         is SearchState.Idle -> {}
@@ -174,6 +186,9 @@ fun SearchResultsGridComponent(
                             lifespan = breed.lifespan,
                             imageUrl = breed.imageUrl,
                             onClick = { onBreedClick(breed.id) },
+                            onFavouriteClick = {
+                                onFavouriteClick(breed)
+                            },
                         )
                     }
                 }
@@ -217,7 +232,7 @@ fun BreedListScreenContentPreview() {
     ).collectAsLazyPagingItems()
 
     SwordCatChallengeTheme {
-        BreedListComponent(pagingItems) {}
+        BreedListComponent(pagingItems, {}, {})
     }
 }
 
@@ -237,7 +252,8 @@ fun BreedListScreenContentErrorStatePreview() {
             ),
             breedsState = pagingItems,
             onSearchQueryChanged = {},
-            onBreedClick = { }
+            onBreedClick = { },
+            onFavouriteClick = {}
         )
     }
 }
