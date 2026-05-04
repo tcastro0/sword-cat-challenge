@@ -26,11 +26,15 @@ object Dimen {
     object Spacing{
         val small:  Dp = 4.dp
         val default:  Dp = 8.dp
+        val defaultPlus:  Dp = 12.dp
         val medium:  Dp = 16.dp
+        val mediumPlus:  Dp = 20.dp
         val large:  Dp = 24.dp
     }
 
     object Images{
+        val iconDefault:Dp = 18.dp
+        val iconMedium:Dp = 38.dp
         val xLarge: Dp = 160.dp
         val xxLarge: Dp = 260.dp
     }

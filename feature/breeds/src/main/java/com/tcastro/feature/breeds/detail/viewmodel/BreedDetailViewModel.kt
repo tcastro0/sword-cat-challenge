@@ -18,9 +18,9 @@ import kotlinx.coroutines.launch
 class BreedDetailViewModel(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val getBreedDetailUseCase: GetBreedDetailUseCase,
+    private val breedId: String
 ) : ViewModel() {
 
-    private val breedId: String = "abys"
     private val _uiState = MutableStateFlow<BreedDetailState>(BreedDetailState.Loading)
     val uiState = _uiState.asStateFlow()
 

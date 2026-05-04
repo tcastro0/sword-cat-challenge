@@ -19,8 +19,9 @@ fun featureBreedsModule() = module {
         )
     }
 
-    viewModel {
+    viewModel { params ->
         BreedDetailViewModel(
+            breedId = params.get(),
             dispatcher = Dispatchers.IO,
             getBreedDetailUseCase = GetBreedDetailUseCase(get()),
         )

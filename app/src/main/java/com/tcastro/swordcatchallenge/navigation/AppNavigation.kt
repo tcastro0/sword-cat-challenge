@@ -32,6 +32,7 @@ fun AppNavigation(
 
                 is NavRoutes.BreedDetail -> NavEntry(route) {
                     BreedDetailScreen(
+                        breedId = route.breedId,
                         onBack = { backStack.removeLastOrNull() }
                     )
                 }
