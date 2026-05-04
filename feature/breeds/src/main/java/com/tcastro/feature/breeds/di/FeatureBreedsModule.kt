@@ -1,7 +1,9 @@
 package com.tcastro.feature.breeds.di
 
+import com.tcastro.domain.breeds.usecase.GetBreedDetailUseCase
 import com.tcastro.domain.breeds.usecase.GetBreedsUseCase
 import com.tcastro.domain.breeds.usecase.SearchBreedUseCase
+import com.tcastro.feature.breeds.detail.viewmodel.BreedDetailViewModel
 import com.tcastro.feature.breeds.list.viewmodel.BreedListViewModel
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.module.dsl.viewModel
@@ -14,6 +16,14 @@ fun featureBreedsModule() = module {
             dispatcher = Dispatchers.IO,
             getBreedsUseCase = GetBreedsUseCase(get()),
             searchBreedUseCase = SearchBreedUseCase(get()),
+        )
+    }
+
+    viewModel { params ->
+        BreedDetailViewModel(
+            breedId = params.get(),
+            dispatcher = Dispatchers.IO,
+            getBreedDetailUseCase = GetBreedDetailUseCase(get()),
         )
     }
 }

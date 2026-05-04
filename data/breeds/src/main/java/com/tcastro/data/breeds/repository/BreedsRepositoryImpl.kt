@@ -60,7 +60,19 @@ class BreedsRepositoryImpl(
     }
 
     override suspend fun getBreedById(id: String): Flow<Breed?> = flow {
-        val breed = service.getBreedById(id).toDomain()
-        emit(breed)
+        val storedBreed = breedDao.getBreedById(id)
+        storedBreed?.let {
+            emit(it.toDomain())
+        }?: run {
+           try {
+
+               val breed = service.getBreedById(id).toDomain()
+               emit(breed)
+               //TODO getBreedById doesnt return image
+               //TODO fetch image from other endpoint
+           }catch (e: Exception) {
+               emit( null)
+           }
+        }
     }
 }

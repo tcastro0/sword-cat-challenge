@@ -3,6 +3,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -70,12 +71,16 @@ dependencies {
 
     implementation(platform(libs.koin.bom))
     implementation(libs.bundles.koin.android)
+    implementation(libs.koin.compose.navigation3)
+
 
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.uitesting)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation(libs.bundles.navigation3)
 
     implementation(project(":core:ui"))
     implementation(project(":data:core"))

@@ -22,6 +22,8 @@ mockk = "1.14.9"
 material3 = "1.4.0"
 pagingVersion = "3.4.2"
 coil = "3.4.0"
+kotlinxSerializerJson = "1.11.0"
+navigation3 = "1.1.1"
 
 [libraries]
 
@@ -63,6 +65,7 @@ koin-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-test = { module = "io.insert-koin:koin-test" }
+koin-compose-navigation3 = { module = "io.insert-koin:koin-compose-navigation3" }
 
 # DB
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -86,6 +89,11 @@ androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", 
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 
+# Navigation
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleRuntimeKtx" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "kotlinxSerializerJson" }
 
 
 
@@ -144,6 +152,12 @@ coil = [
     "coil-compose",
     "coil-network",
 ]
+navigation3 = [
+    "androidx-navigation3-runtime",
+    "androidx-navigation3-ui",
+    "androidx-lifecycle-viewmodel-navigation3",
+    "kotlinx-serialization-json"
+]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -152,4 +166,5 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 

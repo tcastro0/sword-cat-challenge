@@ -44,6 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 fun BreedListScreen(
     modifier: Modifier = Modifier,
     viewModel: BreedListViewModel = koinViewModel(),
+    onItemClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val breedsState = viewModel.breeds.collectAsLazyPagingItems()
@@ -53,7 +54,7 @@ fun BreedListScreen(
         uiState,
         breedsState,
         viewModel::onSearchQueryChanged,
-        viewModel::onBreedClick
+        onBreedClick = onItemClick
     )
 
 }
@@ -64,7 +65,7 @@ fun BreedListScreenContent(
     uiState: BreedListState,
     breedsState: LazyPagingItems<BreedUIModel>,
     onSearchQueryChanged: (String) -> Unit,
-    onBreedClick: (BreedUIModel) -> Unit
+    onBreedClick: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -105,7 +106,7 @@ fun BreedListScreenContent(
 @Composable
 fun BreedListComponent(
     breeds: LazyPagingItems<BreedUIModel>,
-    onBreedClick: (BreedUIModel) -> Unit
+    onBreedClick: (String) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(Dimen.Images.xLarge),
@@ -128,7 +129,7 @@ fun BreedListComponent(
                     name = breed.name,
                     lifespan = breed.lifespan,
                     imageUrl = breed.imageUrl,
-                    onClick = { onBreedClick(breed) },
+                    onClick = { onBreedClick(breed.id) },
                 )
             }
         }
@@ -144,7 +145,7 @@ fun BreedListComponent(
 @Composable
 fun SearchResultsGridComponent(
     searchState: BreedListState,
-    onBreedClick: (BreedUIModel) -> Unit,
+    onBreedClick: (String) -> Unit,
 ) {
     when (val state = searchState.searchState) {
         is SearchState.Idle -> {}
@@ -172,7 +173,7 @@ fun SearchResultsGridComponent(
                             name = breed.name,
                             lifespan = breed.lifespan,
                             imageUrl = breed.imageUrl,
-                            onClick = { onBreedClick(breed) },
+                            onClick = { onBreedClick(breed.id) },
                         )
                     }
                 }
