@@ -57,11 +57,14 @@ fun dataCoreModule(baseUrl: String, apiKey: String) = module {
             androidContext(),
             SwordCatsDatabase::class.java,
             "sword_cats_database"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(false)
+            .build()
     }
 
     // DAOs provider
     single { get<SwordCatsDatabase>().breedDao() }
     single { get<SwordCatsDatabase>().remoteKeyDao() }
+    single { get<SwordCatsDatabase>().favouriteDao() }
 
 }
