@@ -76,7 +76,7 @@ fun BreedDetailScreen(
             BreedDetailContent(
                 state = state,
                 onBack = onBack,
-                onFavouriteClick = {},
+                onFavouriteClick = viewModel::toggleFavourite,
                 modifier = modifier
             )
         }
@@ -95,7 +95,7 @@ private fun BreedDetailContent(
     Scaffold(
         bottomBar = {
             ButtonSectionComponent(
-                false,
+                breed.isFavourite,
                 onFavouriteClick = onFavouriteClick
             )
         }

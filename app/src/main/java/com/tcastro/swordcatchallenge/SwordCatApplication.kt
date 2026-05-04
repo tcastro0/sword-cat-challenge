@@ -5,6 +5,7 @@ import com.tcastro.data.breeds.di.dataBreedsModule
 import com.tcastro.data.core.di.dataCoreModule
 import com.tcastro.data.favourites.di.dataFavouritesModule
 import com.tcastro.feature.breeds.di.featureBreedsModule
+import com.tcastro.feature.favourites.di.featureFavouritesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -25,7 +26,8 @@ class SwordCatApplication : Application() {
                 ),
                 dataBreedsModule(),
                 featureBreedsModule(),
-                dataFavouritesModule()
+                dataFavouritesModule(),
+                featureFavouritesModule()
             )
         }
     }

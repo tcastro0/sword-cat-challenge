@@ -41,6 +41,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
 
     implementation(project(":domain:breeds"))
+    implementation(project(":domain:favourites"))
     implementation(project(":core:ui"))
 
     implementation(libs.androidx.paging.common)

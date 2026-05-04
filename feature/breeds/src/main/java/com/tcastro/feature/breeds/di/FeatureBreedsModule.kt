@@ -3,6 +3,8 @@ package com.tcastro.feature.breeds.di
 import com.tcastro.domain.breeds.usecase.GetBreedDetailUseCase
 import com.tcastro.domain.breeds.usecase.GetBreedsUseCase
 import com.tcastro.domain.breeds.usecase.SearchBreedUseCase
+import com.tcastro.domain.favourites.usecase.GetFavouriteIdsUseCase
+import com.tcastro.domain.favourites.usecase.SetFavouriteUseCase
 import com.tcastro.feature.breeds.detail.viewmodel.BreedDetailViewModel
 import com.tcastro.feature.breeds.list.viewmodel.BreedListViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,8 @@ fun featureBreedsModule() = module {
             dispatcher = Dispatchers.IO,
             getBreedsUseCase = GetBreedsUseCase(get()),
             searchBreedUseCase = SearchBreedUseCase(get()),
+            setFavouriteUseCase = SetFavouriteUseCase(get()),
+            getFavouriteIdsUseCase = GetFavouriteIdsUseCase(get()),
         )
     }
 
@@ -24,6 +28,8 @@ fun featureBreedsModule() = module {
             breedId = params.get(),
             dispatcher = Dispatchers.IO,
             getBreedDetailUseCase = GetBreedDetailUseCase(get()),
+            setFavouriteUseCase = SetFavouriteUseCase(get()),
+            getFavouriteIdsUseCase = GetFavouriteIdsUseCase(get()),
         )
     }
 }

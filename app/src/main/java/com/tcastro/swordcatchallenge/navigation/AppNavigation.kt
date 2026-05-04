@@ -1,6 +1,5 @@
 package com.tcastro.swordcatchallenge.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavBackStack
@@ -9,6 +8,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
 import com.tcastro.feature.breeds.detail.screen.BreedDetailScreen
 import com.tcastro.feature.breeds.list.screen.BreedListScreen
+import com.tcastro.feature.favourites.list.screen.FavouritesScreen
 
 
 @Composable
@@ -38,7 +38,11 @@ fun AppNavigation(
                 }
 
                 is NavRoutes.Favourites -> NavEntry(route) {
-                    Text("Favourites")
+                    FavouritesScreen(
+                        onItemClick = { breedId ->
+                            backStack.add(NavRoutes.BreedDetail(breedId))
+                        }
+                    )
                 }
 
                 else -> NavEntry(route) {}

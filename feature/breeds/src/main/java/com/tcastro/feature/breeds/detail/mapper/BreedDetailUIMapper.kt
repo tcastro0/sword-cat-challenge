@@ -12,5 +12,5 @@ fun Breed.toDetailUiModel() = BreedDetailUiModel(
     description = description,
     lifespan = lifeSpan,
     imageUrl = imageUrl,
-    isFavourite = false
+    isFavourite = isFavourite
 )
