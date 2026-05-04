@@ -28,6 +28,8 @@ fun featureBreedsModule() = module {
             breedId = params.get(),
             dispatcher = Dispatchers.IO,
             getBreedDetailUseCase = GetBreedDetailUseCase(get()),
+            setFavouriteUseCase = SetFavouriteUseCase(get()),
+            getFavouriteIdsUseCase = GetFavouriteIdsUseCase(get()),
         )
     }
 }
