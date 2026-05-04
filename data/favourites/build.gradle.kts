@@ -21,6 +21,18 @@ kotlin {
     jvmToolchain(21)
 }
 
+dependencies {
+    ksp(libs.moshi.kotlin.codegen)
+    api(project(":data:core"))
+    implementation(project(":domain:favourites"))
+
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.paging.common)
+
+    testImplementation(libs.bundles.integration.testing)
+
+}
 
 tasks.whenTaskAdded {
     if (name.contains("AndroidTest")) enabled = false
