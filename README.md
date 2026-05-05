@@ -4,6 +4,20 @@ An Android application built as part of the Sword Health hiring process,
 consuming [The Cat API](https://thecatapi.com/) to browse cat breeds and
 manage favourites.
 
+## Screenshots
+<p float="left">
+  <img src="screenshots/cat_list.jpg" width="200" />
+  <img src="screenshots/details.jpg" width="200" />
+  <img src="screenshots/favourites.jpg" width="200" />
+</p>
+
+<p float="left">
+  <img src="screenshots/search.jpg" width="200" />
+  <img src="screenshots/search_empty_result.jpg" width="200" />
+  <img src="screenshots/offline_mode.jpg" width="200" />
+</p>
+
+
 ## Architecture
 
 The app follows **Clean Architecture** principles with **MVVM** pattern, organized in a multi-module structure.
