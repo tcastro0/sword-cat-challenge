@@ -29,6 +29,7 @@ import com.tcastro.core.ui.components.GenericEmptyComponent
 import com.tcastro.core.ui.components.GenericErrorComponent
 import com.tcastro.core.ui.components.GenericLoadingComponent
 import com.tcastro.core.ui.components.SearchFieldComponent
+import com.tcastro.core.ui.components.TitleBarComponent
 import com.tcastro.core.ui.theme.Dimen
 import com.tcastro.core.ui.theme.SwordCatChallengeTheme
 import com.tcastro.feature.breeds.list.component.BreedListItemComponent
@@ -73,13 +74,14 @@ fun BreedListScreenContent(
         modifier = modifier
             .fillMaxSize()
     ) {
+        TitleBarComponent("Find your cat")
         SearchFieldComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             query = uiState.searchQuery,
             onQueryChange = onSearchQueryChanged,
-            placeholderText = "Search ..."
+            placeholderText = "Search your breed..."
         )
 
         if (uiState.searchQuery.isEmpty()) {
@@ -134,7 +136,7 @@ fun BreedListComponent(
                         .height(Dimen.Images.xxLarge),
                     id = breed.id,
                     name = breed.name,
-                    lifespan = breed.lifespan,
+                    origin = breed.origin,
                     imageUrl = breed.imageUrl,
                     onClick = { onBreedClick(breed.id) },
                     isFavourite = breed.isFavorite,
@@ -183,8 +185,9 @@ fun SearchResultsGridComponent(
                                 .height(Dimen.Images.xxLarge),
                             id = breed.id,
                             name = breed.name,
-                            lifespan = breed.lifespan,
+                            origin = breed.origin,
                             imageUrl = breed.imageUrl,
+                            isFavourite = breed.isFavorite,
                             onClick = { onBreedClick(breed.id) },
                             onFavouriteClick = {
                                 onFavouriteClick(breed)
@@ -205,24 +208,28 @@ fun BreedListScreenContentPreview() {
         BreedUIModel(
             "aege",
             name = "Aegean",
+            origin = "aege",
             imageUrl = "",
             isFavorite = true
         ),
         BreedUIModel(
             "acur",
             name = "American Curl",
+            origin = "acur",
             imageUrl = "",
             isFavorite = true
         ),
         BreedUIModel(
             "asdasd",
             name = "test Curl",
+            origin = "asdasd",
             imageUrl = "",
             isFavorite = true
         ),
         BreedUIModel(
             "3432werdf",
             name = "asdgh agean",
+            origin = "3432werdf",
             imageUrl = "",
             isFavorite = true
         )

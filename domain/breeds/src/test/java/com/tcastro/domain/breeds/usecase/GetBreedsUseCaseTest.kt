@@ -1,6 +1,7 @@
 package com.tcastro.domain.breeds.usecase
 
-import app.cash.turbine.test
+import androidx.paging.PagingData
+import androidx.paging.testing.asSnapshot
 import com.tcastro.domain.breeds.model.Breed
 import com.tcastro.domain.breeds.repository.BreedsRepository
 import io.mockk.every
@@ -15,8 +16,6 @@ class GetBreedsUseCaseTest {
 
     private val repository: BreedsRepository = mockk()
     private lateinit var useCase: GetBreedsUseCase
-    val breeds = listOf(fakeBreed("1"), fakeBreed("2"), fakeBreed("3"))
-
 
     @Before
     fun setUp() {
@@ -24,29 +23,24 @@ class GetBreedsUseCaseTest {
     }
 
     @Test
-    fun `fetch returns breeds from repository`() = runTest {
+    fun `invoke returns breeds from repository`() = runTest {
+        val breeds = listOf(fakeBreed("1"), fakeBreed("2"), fakeBreed("3"))
+        every { repository.getBreeds() } returns flowOf(PagingData.from(breeds))
 
-        every { repository.getBreeds() } returns flowOf(breeds)
+        val result = useCase().asSnapshot()
 
-        useCase().test {
-            val result = awaitItem()
-            assertEquals(breeds, result)
-            awaitComplete()
-        }
-
+        assertEquals(breeds, result)
     }
 
     @Test
-    fun `fetch result is empty`() = runTest {
-        every { repository.getBreeds() } returns flowOf(emptyList())
+    fun `invoke returns empty list when repository is empty`() = runTest {
+        every { repository.getBreeds() } returns flowOf(PagingData.empty())
 
-        useCase().test {
-            val result = awaitItem()
-            assertEquals(emptyList<Breed>(), result)
-            awaitComplete()
-        }
+        val result = useCase().asSnapshot()
 
+        assertEquals(emptyList<Breed>(), result)
     }
+
 
 
 }

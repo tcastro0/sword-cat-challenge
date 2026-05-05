@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ fun FavouriteItemComponent(
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .testTag("favourite_item")
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(Dimen.Spacing.medium),
         colors = CardDefaults.cardColors(
@@ -81,13 +83,13 @@ fun FavouriteItemComponent(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.LocationOn,
+                        imageVector = Icons.Outlined.DateRange,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.size(Dimen.Spacing.smallPlus)
+                        modifier = Modifier.size(Dimen.Spacing.mediumPlus)
                     )
                     Text(
-                        text = favourite.breedOrigin,
+                        text = favourite.breedLifeSpan,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.outline,
                         maxLines = 1,

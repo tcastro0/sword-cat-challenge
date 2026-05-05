@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -33,7 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.tcastro.core.ui.theme.Dimen
@@ -44,7 +45,7 @@ fun BreedListItemComponent(
     modifier: Modifier = Modifier,
     id: String,
     name: String,
-    lifespan: String?,
+    origin: String?,
     imageUrl: String?,
     onClick: (String) -> Unit,
     isFavourite: Boolean = false,
@@ -68,7 +69,7 @@ fun BreedListItemComponent(
                 .height(Dimen.Images.xxLarge)
         ) {
             if (!imageUrl.isNullOrEmpty()) {
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(imageUrl)
                         .crossfade(true)
@@ -78,23 +79,12 @@ fun BreedListItemComponent(
                         .fillMaxWidth()
                         .height(Dimen.Images.xxLarge),
                     contentScale = ContentScale.Crop,
+                    error = {
+                        ImagePlaceholder()
+                    }
                 )
-
             } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.secondaryContainer),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier
-                            .size(Dimen.Dimensions.xxlarge)
-                    )
-                }
+                ImagePlaceholder()
             }
 
             Box(
@@ -104,6 +94,7 @@ fun BreedListItemComponent(
             ) {
                 val icon = if(isFavourite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
                 val iconTint = if(isFavourite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
+                val contentDescription = if (isFavourite) "Remove from favourites" else "Add to favourites"
                 IconButton(
                     onClick = { onFavouriteClick?.invoke()},
                     modifier = Modifier
@@ -114,7 +105,7 @@ fun BreedListItemComponent(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = "set favourite",
+                        contentDescription = contentDescription,
                         tint = iconTint,
                         modifier = Modifier.size(Dimen.Images.iconMedium)
                     )
@@ -124,7 +115,7 @@ fun BreedListItemComponent(
             BreedInfoSection(
                 Modifier.align(Alignment.BottomStart),
                 name,
-                lifespan
+                origin
             )
         }
 
@@ -134,10 +125,29 @@ fun BreedListItemComponent(
 }
 
 @Composable
+private fun ImagePlaceholder(){
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.secondaryContainer),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Person,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.outline,
+            modifier = Modifier
+                .size(Dimen.Dimensions.xxlarge)
+        )
+    }
+}
+
+
+@Composable
 private fun BreedInfoSection(
     modifier: Modifier,
     name: String,
-    lifespan: String?
+    origin: String?
 ) {
     Column(
         modifier = modifier
@@ -170,13 +180,13 @@ private fun BreedInfoSection(
             horizontalArrangement = Arrangement.spacedBy(Dimen.Dimensions.extraSmall)
         ) {
             Icon(
-                imageVector = Icons.Default.Favorite,
+                imageVector = Icons.Outlined.LocationOn,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.size(Dimen.Dimensions.smallPlus)
             )
             Text(
-                text = lifespan?:"-",
+                text = origin?:"-",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.outline,
                 maxLines = 1,
@@ -194,7 +204,7 @@ fun BreedListItemComponentPreview() {
         BreedListItemComponent(
             id = "1",
             name = "persian",
-            lifespan = "20 anos",
+            origin = "egypt",
             imageUrl = "teste",
             onClick = {},
             onFavouriteClick = {}
@@ -209,7 +219,7 @@ fun BreedListItemComponentNoImagePreview() {
         BreedListItemComponent(
             id = "1",
             name = "persian iyufyig ygyuggyuhj",
-            lifespan = "20 anos",
+            origin = "portugal",
             imageUrl = null,
             onClick = {},
             onFavouriteClick = {}
