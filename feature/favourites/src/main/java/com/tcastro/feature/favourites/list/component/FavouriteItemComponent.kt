@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -83,13 +83,13 @@ fun FavouriteItemComponent(
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.LocationOn,
+                        imageVector = Icons.Outlined.DateRange,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.size(Dimen.Spacing.smallPlus)
+                        modifier = Modifier.size(Dimen.Spacing.mediumPlus)
                     )
                     Text(
-                        text = favourite.breedOrigin,
+                        text = favourite.breedLifeSpan,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.outline,
                         maxLines = 1,

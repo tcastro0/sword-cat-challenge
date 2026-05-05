@@ -136,7 +136,7 @@ fun BreedListComponent(
                         .height(Dimen.Images.xxLarge),
                     id = breed.id,
                     name = breed.name,
-                    lifespan = breed.lifespan,
+                    origin = breed.origin,
                     imageUrl = breed.imageUrl,
                     onClick = { onBreedClick(breed.id) },
                     isFavourite = breed.isFavorite,
@@ -185,8 +185,9 @@ fun SearchResultsGridComponent(
                                 .height(Dimen.Images.xxLarge),
                             id = breed.id,
                             name = breed.name,
-                            lifespan = breed.lifespan,
+                            origin = breed.origin,
                             imageUrl = breed.imageUrl,
+                            isFavourite = breed.isFavorite,
                             onClick = { onBreedClick(breed.id) },
                             onFavouriteClick = {
                                 onFavouriteClick(breed)
@@ -207,24 +208,28 @@ fun BreedListScreenContentPreview() {
         BreedUIModel(
             "aege",
             name = "Aegean",
+            origin = "aege",
             imageUrl = "",
             isFavorite = true
         ),
         BreedUIModel(
             "acur",
             name = "American Curl",
+            origin = "acur",
             imageUrl = "",
             isFavorite = true
         ),
         BreedUIModel(
             "asdasd",
             name = "test Curl",
+            origin = "asdasd",
             imageUrl = "",
             isFavorite = true
         ),
         BreedUIModel(
             "3432werdf",
             name = "asdgh agean",
+            origin = "3432werdf",
             imageUrl = "",
             isFavorite = true
         )

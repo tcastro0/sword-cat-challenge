@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.tcastro.core.ui.theme.Dimen
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -54,7 +55,7 @@ fun AverageLifespanCardComponent(
                 Spacer(modifier = Modifier.height(Dimen.Spacing.small))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = "$averageLifespan",
+                        text = "${averageLifespan.roundToInt()}",
                         style = MaterialTheme.typography.headlineMedium
                             .copy(fontWeight = FontWeight.Medium),
                         color = MaterialTheme.colorScheme.onSurface
@@ -77,7 +78,7 @@ fun AverageLifespanCardComponent(
             }
 
             Icon(
-                imageVector = Icons.Outlined.Notifications,
+                imageVector = Icons.Outlined.DateRange,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.size(Dimen.Images.iconLarge)

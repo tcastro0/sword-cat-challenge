@@ -1,6 +1,5 @@
 package com.tcastro.feature.breeds.list.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -23,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -75,18 +75,22 @@ class BreedListViewModel(
     private fun searchBreeds(query: String) {
         viewModelScope.launch(dispatcher) {
             _uiState.update { it.copy(searchState = SearchState.Loading) }
-            searchBreedUseCase(query)
-                .catch {
-                    _uiState.update { state ->
-                        state.copy(searchState = SearchState.Error(it.message ?: "Unknown error"))
-                    }
+            combine(
+                searchBreedUseCase(query),
+                getFavouriteIdsUseCase()
+            ) { breeds, favouriteIds ->
+                breeds.map { breed ->
+                    breed.copy(isFavourite = breed.id in favouriteIds).toUIModel()
                 }
-                .collectLatest { breeds ->
-                    Log.d("collectLatest", "breeds - ${breeds.count()}")
-                    _uiState.update { state ->
-                        state.copy(searchState = SearchState.Success(breeds.toUIModel()))
-                    }
+            }.catch {
+                _uiState.update { state ->
+                    state.copy(searchState = SearchState.Error(it.message ?: "Unknown error"))
                 }
+            }.collectLatest { breeds ->
+                _uiState.update { state ->
+                    state.copy(searchState = SearchState.Success(breeds))
+                }
+            }
         }
     }
 
@@ -97,8 +101,8 @@ class BreedListViewModel(
                     breedId = breed.id,
                     breedName = breed.name,
                     breedImageUrl = breed.imageUrl,
-                    breedLifeSpan = breed.lifespan ?:"",
-                    breedOrigin = breed.origin ?:""
+                    breedLifeSpan = breed.lifespan ?: "",
+                    breedOrigin = breed.origin ?: ""
                 )
             )
         }

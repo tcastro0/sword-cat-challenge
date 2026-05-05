@@ -20,10 +20,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -130,14 +129,14 @@ private fun BreedDetailContent(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     BreedInfoChipComponent(
-                        icon = Icons.Outlined.Notifications,
+                        icon = Icons.Outlined.DateRange,
                         label = "LIFESPAN",
                         value = breed.lifespan?:"-",
                         modifier = Modifier.weight(1f)
                     )
 
                     BreedInfoChipComponent(
-                        icon = Icons.Outlined.Home,
+                        icon = Icons.Outlined.LocationOn,
                         label = "ORIGIN",
                         value = breed.origin,
                         modifier = Modifier.weight(1f)
