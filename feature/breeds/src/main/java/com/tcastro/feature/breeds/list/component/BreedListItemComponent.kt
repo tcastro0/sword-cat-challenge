@@ -104,6 +104,7 @@ fun BreedListItemComponent(
             ) {
                 val icon = if(isFavourite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
                 val iconTint = if(isFavourite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outline
+                val contentDescription = if (isFavourite) "Remove from favourites" else "Add to favourites"
                 IconButton(
                     onClick = { onFavouriteClick?.invoke()},
                     modifier = Modifier
@@ -114,7 +115,7 @@ fun BreedListItemComponent(
                 ) {
                     Icon(
                         imageVector = icon,
-                        contentDescription = "set favourite",
+                        contentDescription = contentDescription,
                         tint = iconTint,
                         modifier = Modifier.size(Dimen.Images.iconMedium)
                     )

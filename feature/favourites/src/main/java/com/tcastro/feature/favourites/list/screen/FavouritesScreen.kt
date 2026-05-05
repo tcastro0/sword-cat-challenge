@@ -2,6 +2,7 @@ package com.tcastro.feature.favourites.list.screen
 
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tcastro.core.ui.components.GenericEmptyComponent
 import com.tcastro.core.ui.components.GenericErrorComponent
 import com.tcastro.core.ui.components.GenericLoadingComponent
+import com.tcastro.core.ui.components.TitleBarComponent
 import com.tcastro.core.ui.theme.Dimen
 import com.tcastro.feature.favourites.list.component.AverageLifespanCardComponent
 import com.tcastro.feature.favourites.list.component.FavouriteItemComponent
@@ -28,28 +30,31 @@ fun FavouritesScreen(
     onItemClick: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    Column(modifier = modifier.fillMaxSize()) {
+        TitleBarComponent("Favourites")
 
-    when (val state = uiState) {
-        is FavouritesState.Loading -> GenericLoadingComponent()
-        is FavouritesState.Error -> GenericErrorComponent(
-            modifier = modifier,
-            title = state.message
-        )
+        when (val state = uiState) {
+            is FavouritesState.Loading -> GenericLoadingComponent()
+            is FavouritesState.Error -> GenericErrorComponent(
+                modifier = modifier,
+                title = state.message
+            )
 
-        is FavouritesState.Success -> {
-            if (state.favourites.isEmpty()) {
-                GenericEmptyComponent(
-                    modifier = modifier,
-                    title = "No favourites yet"
-                )
-            } else {
+            is FavouritesState.Success -> {
+                if (state.favourites.isEmpty()) {
+                    GenericEmptyComponent(
+                        modifier = modifier,
+                        title = "No favourites yet"
+                    )
+                } else {
 
-                FavouriteListSection(
-                    state.favourites,
-                    state.averageLifespan,
-                    viewModel::removeFavourite,
-                    onItemClick
-                )
+                    FavouriteListSection(
+                        state.favourites,
+                        state.averageLifespan,
+                        viewModel::removeFavourite,
+                        onItemClick
+                    )
+                }
             }
         }
     }

@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.bundles.koin.android)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
 
     implementation(project(":domain:favourites"))

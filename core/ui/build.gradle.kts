@@ -33,7 +33,6 @@ dependencies {
     implementation(libs.bundles.compose)
 
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.tooling)
     api(libs.bundles.coil)

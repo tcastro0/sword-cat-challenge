@@ -75,9 +75,12 @@ dependencies {
 
 
     testImplementation(libs.bundles.testing)
-    androidTestImplementation(libs.bundles.uitesting)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.bundles.uitesting)
+
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.bundles.navigation3)
@@ -90,4 +93,11 @@ dependencies {
     implementation(project(":domain:favourites"))
     implementation(project(":feature:breeds"))
     implementation(project(":feature:favourites"))
+
+
+}
+configurations.androidTestImplementation {
+    resolutionStrategy {
+        force("androidx.test.espresso:espresso-core:3.6.1")
+    }
 }

@@ -29,6 +29,7 @@ import com.tcastro.core.ui.components.GenericEmptyComponent
 import com.tcastro.core.ui.components.GenericErrorComponent
 import com.tcastro.core.ui.components.GenericLoadingComponent
 import com.tcastro.core.ui.components.SearchFieldComponent
+import com.tcastro.core.ui.components.TitleBarComponent
 import com.tcastro.core.ui.theme.Dimen
 import com.tcastro.core.ui.theme.SwordCatChallengeTheme
 import com.tcastro.feature.breeds.list.component.BreedListItemComponent
@@ -73,13 +74,14 @@ fun BreedListScreenContent(
         modifier = modifier
             .fillMaxSize()
     ) {
+        TitleBarComponent("Find your cat")
         SearchFieldComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             query = uiState.searchQuery,
             onQueryChange = onSearchQueryChanged,
-            placeholderText = "Search ..."
+            placeholderText = "Search your breed..."
         )
 
         if (uiState.searchQuery.isEmpty()) {
