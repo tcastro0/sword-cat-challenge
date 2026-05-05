@@ -37,7 +37,7 @@ The app follows **Clean Architecture** principles with **MVVM** pattern, organiz
 ## Features
 
 - Cat breed list with pagination
-- Search breeds by name (remote first, local fallback when offline
+- Search breeds by name (remote first, local fallback when offline)
 - Breed details information view
 - Add/remove breeds from favourites
 - Favourites screen with average lifespan calculation
@@ -82,6 +82,7 @@ Search uses a remote-first approach with local fallback:
 Unit tests cover:
 - All domain use cases
 - Integration tests for the breeds repository using MockWebServer
+- E2E UI tests for the main user flows (breeds list, detail, favourites)
 
 
 ## Setup
@@ -96,7 +97,7 @@ Unit tests cover:
 
 ## What I would do next
 - ViewModel unit tests for `BreedListViewModel` and `FavouritesViewModel`
-- UI/E2E tests with Compose testing APIs
+- ~~UI/E2E tests with Compose testing APIs~~
 - Breed image offline caching strategy with explicit cache control
 - String resources extraction and localization support
 
